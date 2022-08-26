@@ -6,9 +6,9 @@ spec:
   capacity:
     storage: 2Gi
   accessModes:
-    - ReadWriteMany
+    - ReadWriteOnce
   persistentVolumeReclaimPolicy: Retain
   nfs:
     path: /storage
-    server: 192.168.130.1
+    server: 192.168.29.142
     readOnly: false
