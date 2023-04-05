@@ -31,9 +31,9 @@ EOF
 	sudo apt-get update
 	sudo apt-get install -y kubelet kubeadm kubectl
 	sudo apt-mark hold kubelet kubeadm kubectl
-	swapoff /swapfile
+	swapoff -a
 	
-	sed -i 's/swapfile/#swapfile/' /etc/fstab
+	sed -i 's/\/swap/#\/swap/' /etc/fstab
 fi
 
 # Set iptables bridging
@@ -43,4 +43,6 @@ net.bridge.bridge-nf-call-iptables = 1
 EOF
 sysctl --system
 
-echo after initializing the control node, follow instructions and use kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/calico.yaml to install the calico plugin (control node only). On the worker nodes, use sudo kubeadm join ... to join
+sudo crictl config --set \
+    runtime-endpoint=unix:///run/containerd/containerd.sock
+echo 'after initializing the control node, follow instructions and use kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.25.0/manifests/calico.yaml to install the calico plugin (control node only). On the worker nodes, use sudo kubeadm join ... to join'
