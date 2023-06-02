@@ -17,9 +17,6 @@ student@control:~/kube3weeks$ history
    17  kubectl create -f https://raw.githubusercontent.com/projectcalico/calico/v3.26.0/manifests/custom-resources.yaml
    25  kubectl apply -f https://raw.githubusercontent.com/projectcalico/calico/v3.26.0/manifests/calico.yaml
    34  kubectl get pods -n kube-system
-   35  kubectl get nodes
-   36  kubectl run testapp --image=nginx
-   37  history
  
 ON THE WORKER NODES
     1  git clone https://github.com/sandervanvugt/cka
@@ -32,3 +29,8 @@ ON THE WORKER NODES
 # check the output of the sudo kubeadm init command for the token that you should be using and run a command like this on all worker nodes
 1.  sudo kubeadm join 192.168.29.30:6443 --token 61bqol.kf2bh5l5vt21k865 \
         --discovery-token-ca-cert-hash sha256:11d644c57e53b8d5875e7389576adf18007569aa26b452e95abe055faf90d401 
+
+BACK ON THE CONTROL NODE
+   35  kubectl get nodes
+   36  kubectl run testapp --image=nginx
+   37  history
