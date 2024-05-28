@@ -1,0 +1,155 @@
+student@control:~/kube3weeks$ history
+    1  cat /etc/os-release 
+    2  sudo vim /etc/hosts
+    3  git clone https://github.com/sandervanvugt/cka
+    4  cd cka
+    5  ./setup-container.sh 
+    6  sudo ./setup-kubetools.sh
+    7  sudo kubeadm init
+    8  kubectl get all
+    9  history
+   10  mkdir ~/.kube
+   11  sudo cp /etc/kubernetes/admin.conf ~/.kube/config
+   12  sudo chown student:student ~/.kube/config
+   13  kubectl get all
+   14  kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+   15  kubectl get ns
+   16  kubectl get pods -n kube-system
+   17  kubectl get pods,ds -n kube-system
+   18  kubectl get nodes
+   19  source <(kubectl completion bash)
+   20  kubectl get svc,pods kube-system
+   21  kubectl get svc,pods -n kube-system
+   22  history
+   23  kubectl run first --image=nginx
+   24  kubectl get pods\
+   25  kubectl get pods
+   26  kubectl delete pod first
+   27  kubectl get pods
+   28  kubectl create deploy second --image=nginx --replicas=3
+   29  kubectl get all
+   30  kubectl delete pod second-65cc57b6bb-5jlvs 
+   31  kubectl get all
+   32  kubectl get pods -o wide
+   33  history
+   34  kubectl get all
+   35  kubectl get all --show-labels
+   36  kubectl get all --selector app=second
+   37  kubectl scale deployment second --replicas 0
+   38  kubectl get all --selector app=second
+   39  kubectl create deploy third --image=nginx:1.17 --replicas=9
+   40  kubectl get all --selector app=third
+   41  kubectl set image -h | less
+   42  #kubectl set image deployment/nginx busybox=busybox nginx=nginx:1.9.1
+   43  kubectl set image deployment/third nginx=nginx:latest
+   44  kubectl get all
+   45  kubectl rollout status
+   46  kubectl rollout status deploy/third
+   47  kubectl rollout undo -h | less
+   48  kubectl rollout undo deploy/third
+   49  kubectl get all
+   50  kubectl create deploy fourth --image=nginx:1.18 --replicas=3 --dry-run=client -o yaml > fourth.yaml
+   51  vim fourth.yaml 
+   52  kubectl explain deploy.spec.strategy | less
+   53  vim fourth.yaml 
+   54  kubectl apply -f fourth.yaml 
+   55  kubectl get deploy fourth -o yaml | less
+   56  kubectl set image deployment/fourth nginx=nginx:latest; sleep 1; kubectl get all --selector app=fourth
+   57  history
+   58  vim fourth.yaml 
+   59  kubectl get deploy
+   60  kubectl edit deploy third 
+   61  vim fourth.yaml 
+   62  kubectl apply -f fourth.yaml 
+   63  kubectl rollout history
+   64  kubectl rollout history deploy third
+   65  cd
+   66  kubectl create deploy fifth --image=nginx --dry-run=client -o yaml > fifth.yaml
+   67  vim fifth.yaml 
+   68  kubectl apply -f fifth.yaml 
+   69  kubectl get ds,pods -o wude
+   70  kubectl get ds,pods -o wide
+   71  kubectl get ds -A
+   72  kubectl get nodes
+   73  kubectl edit node control
+   74  kubectl edit -n kube-system ds calico-node 
+   75  history
+   76  kubectl create deploy nginxsvc --image=nginx
+   77  kubectl scale deployment nginxsvc --replicas 3
+   78  kubectl get all --selector app=nginxsvc
+   79  kubectl expose deploy nginxsvc --port=80
+   80  kubectl get all --selector app=nginxsvc
+   81  kubectl get svc nginxsvc -o yaml | less
+   82  kubectl describe svc nginxsvc 
+   83  curl 10.110.179.52
+   84  kubectl get endpoints
+   85  kubectl edit svc nginxsvc 
+   86  kubectl get svc
+   87  curl 192.168.29.141:30348
+   88  kubectl edit svc nginxsvc 
+   89  kubectl describe svc nginxsvc 
+   90  kubectl edit svc nginxsvc 
+   91  kubectl describe svc nginxsvc 
+   92  ls
+   93  tar xvf helm-v3.15.1-linux-amd64.tar.gz 
+   94  sudo mv linux-amd64/helm /usr/local/bin/
+   95  helm version
+   96  helm repo add bitnami https://charts.bitnami.com/bitnami
+   97  source <(helm completion bash)
+   98  helm repo list
+   99  helm search repo bitnami
+  100  helm search repo file
+  101  helm search repo nginx --versions
+  102  helm install bitnami/mysql --generate-name
+  103  kubectl get all
+  104  kubectl get all | grep mysql
+  105  helm show chart bitnami/mysql
+  106  helm show all  bitnami/mysql
+  107  helm status mysql-1716915519 
+  108  history
+  109  helm repo list
+  110  helm show values bitnami/nginx
+  111  helm show values bitnami/nginx | grep commonLabels
+  112  helm show values bitnami/nginx | grep replicaCount
+  113  vim values.yaml
+  114  helm install bitnami/nginx --generate-name --values values.yaml
+  115  helm list
+  116  helm get values nginx-1716916632 
+  117  kubectl get all
+  118  kubectl get deploy --show-labels
+  119  kubectl api-resources | less
+  120  git clone https://github.com/sandervanvugt/kube3weeks
+  121  cd kube3weeks/
+  122  ls
+  123  vim crd-object.yaml 
+  124  kubectl apply -f crd-object.yaml 
+  125  kubectl api-resources | grep backup
+  126  cat crd-backup.yaml 
+  127  kubectl apply -f crd-backup.yaml 
+  128  kubectl get backups
+  129  kubectl api-resources | grep crd
+  130  kubectl get -A ippols
+  131  kubectl get -A ippools
+  132  kubectl get ippools
+  133  kubectl get ippools -o yaml | less
+  134  kubectl get pods -n kube-system 
+  135  kubectl get pods -n kube-system calico-node-hbn8h -o yaml | less
+  136  kubectl explain pod.spec | less
+  137  kubectl explain pod.spec.volumes | less
+  138  kubectl explain pv.spec | less
+  139  vim pv.yaml 
+  140  kubectl explain pv.spec
+  141  vim pv.yaml 
+  142  kubectl explain pv.spec | less
+  143  kubectl apply -f pv.yaml
+  144  kubectl get pv
+  145  vim pvc.yaml 
+  146  kubectl apply -f pvc.yaml
+  147  kubectl get pv,pvc
+  148  vim pv-pod.yaml 
+  149  kubectl apply -f pv-pod.yaml 
+  150  kubectl exec pv-pod -- touch /usr/share/nginx/html/hello
+  151  kubectl describe pv pv-volume 
+  152  kubectl get pods -o wide
+  153  history
+
