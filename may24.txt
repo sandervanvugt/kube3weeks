@@ -1,0 +1,342 @@
+    1  cat /etc/os-release 
+    2  sudo vim /etc/hosts
+    3  git clone https://github.com/sandervanvugt/cka
+    4  cd cka
+    5  ./setup-container.sh 
+    6  sudo ./setup-kubetools.sh
+    7  sudo kubeadm init
+    8  kubectl get all
+    9  history
+   10  mkdir ~/.kube
+   11  sudo cp /etc/kubernetes/admin.conf ~/.kube/config
+   12  sudo chown student:student ~/.kube/config
+   13  kubectl get all
+   14  kubectl apply -f https://docs.projectcalico.org/manifests/calico.yaml
+   15  kubectl get ns
+   16  kubectl get pods -n kube-system
+   17  kubectl get pods,ds -n kube-system
+   18  kubectl get nodes
+   19  source <(kubectl completion bash)
+   20  kubectl get svc,pods kube-system
+   21  kubectl get svc,pods -n kube-system
+   22  history
+   23  kubectl run first --image=nginx
+   24  kubectl get pods\
+   25  kubectl get pods
+   26  kubectl delete pod first
+   27  kubectl get pods
+   28  kubectl create deploy second --image=nginx --replicas=3
+   29  kubectl get all
+   30  kubectl delete pod second-65cc57b6bb-5jlvs 
+   31  kubectl get all
+   32  kubectl get pods -o wide
+   33  history
+   34  kubectl get all
+   35  kubectl get all --show-labels
+   36  kubectl get all --selector app=second
+   37  kubectl scale deployment second --replicas 0
+   38  kubectl get all --selector app=second
+   39  kubectl create deploy third --image=nginx:1.17 --replicas=9
+   40  kubectl get all --selector app=third
+   41  kubectl set image -h | less
+   42  #kubectl set image deployment/nginx busybox=busybox nginx=nginx:1.9.1
+   43  kubectl set image deployment/third nginx=nginx:latest
+   44  kubectl get all
+   45  kubectl rollout status
+   46  kubectl rollout status deploy/third
+   47  kubectl rollout undo -h | less
+   48  kubectl rollout undo deploy/third
+   49  kubectl get all
+   50  kubectl create deploy fourth --image=nginx:1.18 --replicas=3 --dry-run=client -o yaml > fourth.yaml
+   51  vim fourth.yaml 
+   52  kubectl explain deploy.spec.strategy | less
+   53  vim fourth.yaml 
+   54  kubectl apply -f fourth.yaml 
+   55  kubectl get deploy fourth -o yaml | less
+   56  kubectl set image deployment/fourth nginx=nginx:latest; sleep 1; kubectl get all --selector app=fourth
+   57  history
+   58  vim fourth.yaml 
+   59  kubectl get deploy
+   60  kubectl edit deploy third 
+   61  vim fourth.yaml 
+   62  kubectl apply -f fourth.yaml 
+   63  kubectl rollout history
+   64  kubectl rollout history deploy third
+   65  cd
+   66  kubectl create deploy fifth --image=nginx --dry-run=client -o yaml > fifth.yaml
+   67  vim fifth.yaml 
+   68  kubectl apply -f fifth.yaml 
+   69  kubectl get ds,pods -o wude
+   70  kubectl get ds,pods -o wide
+   71  kubectl get ds -A
+   72  kubectl get nodes
+   73  kubectl edit node control
+   74  kubectl edit -n kube-system ds calico-node 
+   75  history
+   76  kubectl create deploy nginxsvc --image=nginx
+   77  kubectl scale deployment nginxsvc --replicas 3
+   78  kubectl get all --selector app=nginxsvc
+   79  kubectl expose deploy nginxsvc --port=80
+   80  kubectl get all --selector app=nginxsvc
+   81  kubectl get svc nginxsvc -o yaml | less
+   82  kubectl describe svc nginxsvc 
+   83  curl 10.110.179.52
+   84  kubectl get endpoints
+   85  kubectl edit svc nginxsvc 
+   86  kubectl get svc
+   87  curl 192.168.29.141:30348
+   88  kubectl edit svc nginxsvc 
+   89  kubectl describe svc nginxsvc 
+   90  kubectl edit svc nginxsvc 
+   91  kubectl describe svc nginxsvc 
+   92  ls
+   93  tar xvf helm-v3.15.1-linux-amd64.tar.gz 
+   94  sudo mv linux-amd64/helm /usr/local/bin/
+   95  helm version
+   96  helm repo add bitnami https://charts.bitnami.com/bitnami
+   97  source <(helm completion bash)
+   98  helm repo list
+   99  helm search repo bitnami
+  100  helm search repo file
+  101  helm search repo nginx --versions
+  102  helm install bitnami/mysql --generate-name
+  103  kubectl get all
+  104  kubectl get all | grep mysql
+  105  helm show chart bitnami/mysql
+  106  helm show all  bitnami/mysql
+  107  helm status mysql-1716915519 
+  108  history
+  109  helm repo list
+  110  helm show values bitnami/nginx
+  111  helm show values bitnami/nginx | grep commonLabels
+  112  helm show values bitnami/nginx | grep replicaCount
+  113  vim values.yaml
+  114  helm install bitnami/nginx --generate-name --values values.yaml
+  115  helm list
+  116  helm get values nginx-1716916632 
+  117  kubectl get all
+  118  kubectl get deploy --show-labels
+  119  kubectl api-resources | less
+  120  git clone https://github.com/sandervanvugt/kube3weeks
+  121  cd kube3weeks/
+  122  ls
+  123  vim crd-object.yaml 
+  124  kubectl apply -f crd-object.yaml 
+  125  kubectl api-resources | grep backup
+  126  cat crd-backup.yaml 
+  127  kubectl apply -f crd-backup.yaml 
+  128  kubectl get backups
+  129  kubectl api-resources | grep crd
+  130  kubectl get -A ippols
+  131  kubectl get -A ippools
+  132  kubectl get ippools
+  133  kubectl get ippools -o yaml | less
+  134  kubectl get pods -n kube-system 
+  135  kubectl get pods -n kube-system calico-node-hbn8h -o yaml | less
+  136  kubectl explain pod.spec | less
+  137  kubectl explain pod.spec.volumes | less
+  138  kubectl explain pv.spec | less
+  139  vim pv.yaml 
+  140  kubectl explain pv.spec
+  141  vim pv.yaml 
+  142  kubectl explain pv.spec | less
+  143  kubectl apply -f pv.yaml
+  144  kubectl get pv
+  145  vim pvc.yaml 
+  146  kubectl apply -f pvc.yaml
+  147  kubectl get pv,pvc
+  148  vim pv-pod.yaml 
+  149  kubectl apply -f pv-pod.yaml 
+  150  kubectl exec pv-pod -- touch /usr/share/nginx/html/hello
+  151  kubectl describe pv pv-volume 
+  152  kubectl get pods -o wide
+  153  history
+  154  cd
+  155  sudo apt install nfs-server -y
+  156  sudo mkdir /nfsexport
+  157  sudo chmod 777 /nfsexport/
+  158  sudo vim /etc/exports
+  159  sudo systemctl restart nfs-server
+  160  helm repo add nfs-subdir-external-provisioner https://kubernetes-sigs.github.io/nfs-subdir-external-provisioner/
+  161  helm install nfs-subdir-external-provisioner  nfs-subdir-external-provisioner/nfs-subdir-external-provisioner --set nfs.server=192.168.29.140 --set nfs.path=/nfsexport
+  162  kubectl get pods -A
+  163  kubectl get pv
+  164  cd kube3weeks/
+  165  ls
+  166  vim nfs-provisioner-pvc-test.yaml 
+  167  kubectl get storageclass
+  168  vim nfs-provisioner-pvc-test.yaml 
+  169  kubectl apply -f nfs-provisioner-pvc-test.yaml 
+  170  kubectl get pvc,pv
+  171  kubectl describe pv pvc-5a084a74-cff5-4bc0-a05b-2c05fd689d3e 
+  172  ls -l /nfsexport/
+  173  vim varsfile\
+  174  vim varsfile
+  175  kubectl create cm mydbvars --from-env-file=varsfile
+  176  kubectl describe cm mydbvars 
+  177  kubectl get cm mydbvars -o yaml
+  178  kubectl create deploy mydb --image=mariadb --replicas=3
+  179  kubectl get all --selector mydb
+  180  kubectl get all --selector app=mydb
+  181  kubectl describe pod mydb-7d6458794-747zm 
+  182  kubectl logs mydb-7d6458794-747zm 
+  183  kubectl set env deploy mydb --from-configmap/mydbvars
+  184  kubectl set env deploy mydb --from=configmap/mydbvars
+  185  kubectl get all --selector app=mydb
+  186  kubectl get deployments.apps mydb -o yaml | less
+  187  history
+  188  kubectl get deployments.apps mydb -o yaml | less
+  189  echo hello configuration > index.html
+  190  kubectl create cm myindex --from-file=index.html
+  191  kubectl get cm myindex -o yaml
+  192  kubectl create deploy myweb --image=nginx
+  193  kubectl edit myweb
+  194  kubectl edit deploy myweb
+  195  kubectl get all --selector app=myweb
+  196  kubectl describe pod myweb-59dbdfc554-5kh74 
+  197  kubectl get pods
+  198  kubectl get pods -n kube-system 
+  199  kubectl delete pod -n kube-system calico-node-hbn8h calico-node-phrc7 calico-node-v7gw2 
+  200  kubectl get pods -n kube-system 
+  201  ip a
+  202  kubectl get pods
+  203  kubectl exec myweb-798cb788c4-zjz4p -- cat /usr/share/nginx/html/index.html
+  204  kubectl describe pod mysql-1716915519-0 
+  205  history
+  206  kubectl create secret docker-registry dockercreds --docker-username=unclebob --docker-password=secretpw --docker-email=uncle@bob.org --docker-server=https://index.docker.io/v1
+  207  kubectl get secret dockercreds -o yaml
+  208  echo eyJhdXRocyI6eyJodHRwczovL2luZGV4LmRvY2tlci5pby92MSI6eyJ1c2VybmFtZSI6InVuY2xlYm9iIiwicGFzc3dvcmQiOiJzZWNyZXRwdyIsImVtYWlsIjoidW5jbGVAYm9iLm9yZyIsImF1dGgiOiJkVzVqYkdWaWIySTZjMlZqY21WMGNIYz0ifX19 | base64 -d
+  209  kubectl run --image=docker.io/sandervanvugt/gittools --dry-run=client -o yaml > gittools.yaml
+  210  kubectl run gittools --image=docker.io/sandervanvugt/gittools --dry-run=client -o yaml > gittools.yaml
+  211  vim gittools.yaml 
+  212  kubectl create -f gittools.yaml 
+  213  vim gittools.yaml 
+  214  kubectl create -f gittools.yaml 
+  215  kubectl get pods
+  216  kubectl describe pod gittools 
+  217  kubectl get pods
+  218  kubectl get pods nfs-subdir-external-provisioner-6764c956f5-rs2hh -o yaml | less
+  219  kubectl get sa
+  220  kubectl get sa nfs-subdir-external-provisioner -o yaml
+  221  kubectl get roles -A
+  222  kubectl get rolebindings -A
+  223  kubectl get rolebindings.rbac.authorization.k8s.io leader-locking-nfs-subdir-external-provisioner -o yaml | less
+  224  kubectl get roles leader-locking-nfs-subdir-external-provisioner -o yaml | less
+  225  kubectl get clusterroles
+  226  kubectl get clusterroles | grep nfs
+  227  kubectl get clusterroles nfs-subdir-external-provisioner-runner -o yaml | less
+  228  kubectl create ns bellevue
+  229  kubectl create role viewer --verb=get --verb=list --verb=watch --resource=pod -n bellevue
+  230  kubectl create sa viewer -n bellevue
+  231  kubectl create rolebinding --serviceaccount=bellevue:viewer --role=viewer -n bellevue
+  232  kubectl create rolebinding belleviewer --serviceaccount=bellevue:viewer --role=viewer -n bellevue
+  233  kubectl create deploy viewnginx -n bellevue --image=nginx --replicas=3
+  234  kubectl set sa deployment viewnginx viewer -n bellevue
+  235  kubectl create role --help | less
+  236  kubectl create rolebinding --help | less
+  237  kubectl describe sa -n kube-system coredns
+  238  kubectl describe clusterrolebindings.rbac.authorization.k8s.io system:coredns
+  239  kubectl describe clusterrole system:coredns
+  240  kubectl api-resources | less
+  241  history
+  242  kubectl create rolebinding --help | less
+  243  kubectl get ns
+  244  kubectl get sa -n bellevue 
+  245  history
+  246  kubectl apply -f https://github.com/kubernetes-sigs/gateway-api/releases/download/v1.0.0/standard-install.yaml
+  247  helm install ngf oci://ghrc.io/nginxc/charts/nginx-gateway-fabric --create-namespace -n nginx-gateway
+  248  helm install ngf oci://ghrc.io/nginxinc/charts/nginx-gateway-fabric --create-namespace -n nginx-gateway
+  249  helm install ngf oci://ghcr.io/nginxinc/charts/nginx-gateway-fabric --create-namespace -n nginx-gateway
+  250  kubectl get all -n nginx-gateway 
+  251  kubectl get gc
+  252  kubectl edit -n nginx-gateway svc ngf-nginx-gateway-fabric 
+  253  kubectl create deployment nginxgw --image=nginx --replicas=3
+  254  kubectl expose deploy nginxgw --port=80
+  255  cd ..
+  256  git clone https://github.com/sandervanvugt/ckad
+  257  cd ckad
+  258  vim http-routing.yaml 
+  259  kubectl apply -f http-routing.yaml 
+  260  sudo sh -c "echo 127.0.0.1 whatever.com >> /etc/hosts"
+  261  curl whatever.com
+  262  kubectl -n nginx-gateway port-forward ngf-nginx-gateway-fabric-bb8598998-wnxt6 8080:80 8443:443
+  263  bg
+  264  curl whatever.com:8080
+  265  kubectl get -n nginx-gateway 
+  266  kubectl get all -n nginx-gateway 
+  267  curl 127.0.0.1:30490
+  268  curl 192.168.29.140:30490
+  269  kubectl get all -n nginx-gateway 
+  270  curl -H "whatever.com" 127.0.0.1
+  271  curl -H "whatever.com" 127.0.0.1:30490
+  272  curl -H "Host: whatever.com" 127.0.0.1:30490
+  273  curl -H "Host: whatever.com" 192.168.29.140:30490
+  274  cd ../kube3weeks/
+  275  vim statefulset.yaml 
+  276  kubectl get storageclass
+  277  vim statefulset.yaml 
+  278  kubectl apply -f statefulset.yaml 
+  279  kubectl get svc,statefulset,pods,pvc,pv
+  280  kubectl get svc,statefulset,pods
+  281  history
+  282  kubectl get pods
+  283  kubectl delete pod web-2
+  284  kubectl get pods
+  285  kubectl apply -f https://github.com/kubernetes-sigs/metrics-server/releases/latest/download/components.yaml
+  286  kubectl edit deploy -n kube-system metrics-server
+  287  kubectl top pods
+  288  kubectl get pods -n kube-system 
+  289  kubectl top pods
+  290  cd ../ckad/
+  291  cd autoscaling/
+  292  ls
+  293  cat Dockerfile 
+  294  vim hpa.yaml 
+  295  kubectl apply -f hpa.yaml 
+  296  kubectl get deploy
+  297  kubectl autoscale deployment php-apache --cpu-percent=1 --min=3 --max=10
+  298  kubectl get hpa
+  299  kubectl get deploy php-apache 
+  300  kubectl get pods
+  301  kubectl get deploy php-apache 
+  302  kubectl get hpa
+  303  cd ..
+  304  vim canary.yaml 
+  305  sed -i -e 's/new/old/' canary.yaml 
+  306  vim canary.yaml 
+  307  ls can*
+  308  vim old.htlm
+  309  kubectl create cm -h | less
+  310  kubectl create cm old --from-file=old.html
+  311  mv old.htlm old.html
+  312  kubectl create cm old --from-file=old.html
+  313  echo this is the new one > new.html
+  314  vim canary.yaml 
+  315  kubectl apply -f canary.yaml 
+  316  kubectl get all --selector type=canary
+  317  kubectl expose deployment old-nginx --name=canary --port=80 --selector type=canary --type=NodePort
+  318  kubectl get all --selector type=canary
+  319  curl localhost:31651
+  320  curl 192.168.29.140:31651
+  321  curl 10.110.209.252
+  322  kubectl edit svc canary 
+  323  curl 10.110.209.252
+  324  kubectl get svc
+  325  kubectl describe svc canary
+  326  kubectl edit deploy old-nginx 
+  327  vim canary.yaml 
+  328  kubectl get cm old -o yaml
+  329  curl 10.110.209.252/old.html
+  330  kubectl delete -f canary.yaml 
+  331  kubectl edit cm old
+  332  kubectl apply -f canary.yaml 
+  333  curl 10.110.209.252
+  334  kubectl create cm new --from-file=new.html
+  335  kubectl edit cm new
+  336  vim canary.yaml 
+  337  kubectl apply -f canary.yaml 
+  338  kubectl describe svc canary 
+  339  curl 10.110.209.252
+  340  kubectl scale deployment new-nginx --replicas=3
+  341  kubectl scale deployment old-nginx --replicas=0
+  342  history
